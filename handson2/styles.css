@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .resume {
+    display: flex;
+    background-color: #f5f5f5;
+  }
+  
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    padding: 20px;
+    background-image: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .profile-title {
+    color: #666;
+  }
+  
+  .details {
+   
+    flex-grow: 1;
+    padding: 20px;
+    background-image: url("image2.jpeg"); /* Add your background image URL here */
+    background-size: cover;
+    background-position: center;
+    
+  }
+ 
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0;
+  }
+  
+  p {
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  strong {
+    font-weight: bold;
+  }
+  
