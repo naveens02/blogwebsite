@@ -1,0 +1,151 @@
+body, ul, table {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0c0d0d;
+}
+
+.todo-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#taskInput,
+#priority,
+#status,
+#addTask {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+#addTask {
+    border-radius: 15px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+}
+
+#addTask:hover {
+    background-color: #0056b3;
+}
+
+ul#taskList {
+    list-style: none;
+    padding: 0;
+}
+
+ul#taskList li {
+    background-color: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-content .task-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.task-content .task-priority,
+.task-content .status {
+    font-size: 14px;
+    margin-left: auto;
+}
+
+.task-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.task-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.edit-button img,
+.delete-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.ui-box {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100px;
+    background-color: #d2d2d2;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    color: #333;
+}
+
+.status {
+    font-weight: bold;
+}
+
+#addTaskButton {
+    border: none;
+    border-radius: 15px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px;
+}
+
+.editTaskButton {
+    background-color: #c1beb4;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.editTaskButton:hover {
+    background-color: #edeae1;
+}
+
+.deleteTaskButton {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.deleteTaskButton:hover {
+    background-color: #c82333;
+}
