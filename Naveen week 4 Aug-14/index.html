@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Task Manager</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <div class="task-form">
+            <input type="text" id="taskInput" placeholder="Add a new task...">
+            <select id="taskPriority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <select id="taskStatus">
+                <option value="todo">To Do</option>
+                <option value="inProgress">In Progress</option>
+                <option value="done">Done</option>
+            </select>
+            <button id="addTaskButton"> +  Add</button>
+        </div>
+        <div class="modal" id="editModal" style="display: none;">
+            <div class="modal-content">
+                <h2>Edit Task</h2>
+                <input type="text" id="editedTask" placeholder="Edit the task...">
+                <select id="editedPriority">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+                <select id="editedStatus">
+                    <option value="todo">To Do</option>
+                    <option value="inProgress">In Progress</option>
+                    <option value="done">Done</option>
+                </select>
+                <button id="saveEditButton">Save</button>
+                <button id="cancelEditButton">Cancel</button>
+            </div>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
