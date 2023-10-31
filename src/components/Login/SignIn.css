@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin-left: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.signin-form {
+  width: 50vw;
+  max-width: 400px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.form-content {
+  padding: 50px;
+}
+
+.right-svg {
+  width: 50vw;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+  background-size: 650px;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+}
+
+.signin-form .form-content .ant-btn {
+  width: 100%;
+}
+
+.form-content {
+  text-align: center;
+}
+
+.spaces {
+  margin-top: 0%;
+}

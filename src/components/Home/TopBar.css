@@ -1,0 +1,40 @@
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #001529;
+    padding: 0 20px;
+  }
+  
+  .logo-section {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-links {
+    display: flex;
+    margin-left: 20px;
+  }
+  
+  .menu-links a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  
+  .menu-links a.active {
+    font-weight: bold;
+  }
+  
+  .menu-links a.active.dashboard {
+    background-color: #1890ff;
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+  
+  .user-profile {
+    color: white;
+    text-decoration: none;
+  }
+  
