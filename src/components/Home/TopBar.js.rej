@@ -1,0 +1,9 @@
+diff a/src/components/Home/TopBar.js b/src/components/Home/TopBar.js	(rejected hunks)
+@@ -0,6 +0,7 @@
+   const dispatch = useDispatch();
+   const location = useLocation();
+ 
++  const [isModalOpen, setIsModalOpen] = useState(false);
+   const [loading, setLoading] = useState(false);
+ 
+     const handleLogout = () => {

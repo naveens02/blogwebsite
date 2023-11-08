@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Spin } from 'antd';
+import { Form, Input, Button, message, Spin } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../Redux/authSlice';
 import axios from 'axios';
 import RightSVG from './Right.svg';
 import './SignIn.css';
-import { loginSuccess } from '../../Redux/authSlice';
 
 const SignIn = ({ messageApi }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [errorData, setErrorData] = useState('');
-  const [loading, setLoading] = useState(false); 
-
-  const apiUrl = 'https://react-assignment-api.mallow-tech.com/api/login';
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (values) => {
-    setLoading(true); 
-    const requestData = {
-      email: values.email,
-      password: values.password,
-    };
+    setLoading(true);
     try {
+      const apiUrl = 'https://react-assignment-api.mallow-tech.com/api/login';
+
+      const requestData = {
+        email: values.email,
+        password: values.password,
+      };
+
       const response = await axios.post(apiUrl, requestData, {
         headers: {
           'Content-Type': 'application/json',
@@ -31,20 +32,33 @@ const SignIn = ({ messageApi }) => {
       });
 
       if (response.status === 200) {
-        if (messageApi) messageApi.info('Login successful');
-        dispatch(loginSuccess({ token: response.data }));
-        sessionStorage.setItem('login', JSON.stringify(response.data));
+        const userData = {
+          token: response.headers.authorization,
+          isAuthenticated: true,
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          profile_Pic: response.data.profilePic,
+          // Add any other user data you want to store
+        };
+
+        dispatch(loginSuccess(userData));
+
+        const token=response.headers.get('Authorization');
+        localStorage.setItem('token',token);// Save user data in local storage
+        localStorage.setItem('UserData', JSON.stringify(userData));
+           
+        message.success('Login successful');
         navigate('/dashboard');
       } else {
-        if (messageApi) messageApi.error('Login Failed');
+        message.error('Login Failed');
         console.error('Login failed');
       }
     } catch (error) {
-      if (messageApi) messageApi.error('Login Failed');
+      message.error('Login Failed');
       setErrorData('Wrong email/password');
       console.error('Error during login', error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -58,17 +72,14 @@ const SignIn = ({ messageApi }) => {
 
   return (
     <div className="container">
-      
       <Form
         name="signin"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         className="signin-form"
       >
-       
         <div className="form-content">
           <h1>Sign in to your account</h1>
-
           <Form.Item
             name="email"
             rules={[
@@ -86,15 +97,10 @@ const SignIn = ({ messageApi }) => {
             <Input.Password placeholder="Password" />
           </Form.Item>
 
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
-           
-          </Form.Item>
           {loading && <Spin />}
           <Form.Item>
-            <Button type="primary" htmlType="submit" >
-              {loading ?<>Signing In... </>  : 'Sign In'}
-             
+            <Button type="primary" htmlType="submit">
+              {loading ? 'Signing In...' : 'Sign In'}
             </Button>
           </Form.Item>
 
@@ -102,19 +108,16 @@ const SignIn = ({ messageApi }) => {
             <span className="">Don't have an account? </span>
             <Link to="/signup">Sign Up</Link>
           </Form.Item>
-        </div>
-        <span
-          type="danger"
-          style={{ textAlign: 'center', fontSize: '14px', fontWeight: '400' }}
-        >
-          {errorData}
-        </span>
-      </Form>
 
-      <div className="right-svg" style={{ backgroundImage: `url(${RightSVG})` }}>
-       
-       
-      </div>
+          <span
+            type="danger"
+            style={{ textAlign: 'center', fontSize: '14px', fontWeight: '400' }}
+          >
+            {errorData}
+          </span>
+        </div>
+      </Form>
+      <div className="right-svg" style={{ backgroundImage: `url(${RightSVG})` }}></div>
     </div>
   );
 };

@@ -1,29 +1,62 @@
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logout } from "../../Redux/authSlice";
-import { Layout, Avatar, Menu, Dropdown, Space, Spin } from "antd";
-import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
-
-import Logo from "./Logo.svg";
-import "./TopBar.css"; 
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../Redux/authSlice';
+import { Layout, Avatar, Menu, Dropdown, Space } from 'antd';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import Logo from './Logo.svg';
+import EditProfile from './EditProfile';
+import './TopBar.css';
 
 const { Header } = Layout;
 
 const TopBar = () => {
-  const userData = JSON.parse(sessionStorage.getItem("login"));
-  const navigate = useNavigate();
+  const userData = useSelector((state) => state.auth); // Access user data from Redux state
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [profileData, setProfileData] = useState({}); // State to store user profile data
 
-    const handleLogout = () => {
+  useEffect(() => {
+    if (userData.isAuthenticated) {
+      // Set the profile data if the user is authenticated and user data is available
+      setProfileData(userData);
+    } else {
+      // Retrieve UserData from localStorage
+      const userDataString = localStorage.getItem('userData');
+
+      if (userDataString) {
+        // Parse the UserData string into an object
+        const userDataFromLocalStorage = JSON.parse(userDataString);
+
+        // Update the profile data with the retrieved data from localStorage
+        setProfileData(userDataFromLocalStorage);
+      } else {
+        // If no user data found in local storage and user is not authenticated,
+        // set an initial state for profileData
+        setProfileData({});
+      }
+    }
+  }, [userData]);
+
+  const handleLogout = () => {
     dispatch(logout());
-    sessionStorage.removeItem("login");
-    navigate("/signin");
+    localStorage.removeItem('token'); // Assuming 'token' is stored in localStorage
+    navigate('/signin');
   };
+
+  const updateProfileInContainer = (first_name, lastName, image) => {
+    const updatedProfile = {
+      ...profileData,
+      firstName: first_name,
+      last_name: lastName,
+      profile_Pic: image,
+    };
+    setProfileData(updatedProfile);
+  };
+
   const menu = (
     <Menu>
       <Menu.Item
@@ -41,6 +74,14 @@ const TopBar = () => {
     </Menu>
   );
 
+  const profilePic = profileData.profile_Pic ? (
+    <Avatar src={profileData.profile_Pic} />
+  ) : (
+    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+  );
+
+  const firstName = userData.first_name || profileData.first_name || 'Guest';
+
   return (
     <Layout>
       <Header className="top-bar">
@@ -50,9 +91,9 @@ const TopBar = () => {
               src={Logo}
               alt="Logo"
               style={{
-                width: "88px",
-                height: "24px",
-                transform: "rotate(0deg)",
+                width: '88px',
+                height: '24px',
+                transform: 'rotate(0deg)',
               }}
             />
           </div>
@@ -65,26 +106,23 @@ const TopBar = () => {
             </Link>
           </div>
         </div>
-        {userData && (
-          <Dropdown overlay={menu} trigger={["hover"]}>
+        {userData.isAuthenticated && (
+          <Dropdown overlay={menu} trigger={['hover']}>
             <Link to="#" className="user-profile">
               <Space size="small">
-                {userData.profile_Pic ? (
-                  <Avatar src={userData.profile_Pic} />
-                ) : (
-                  <Avatar style={{ backgroundColor: "#87d068" }} icon={<UserOutlined />} />
-                )}
-                <span style={{ color: "white" }}>{userData.first_name}</span>
+                {profilePic}
+                <span style={{ color: 'white' }}>{firstName}</span>
               </Space>
             </Link>
           </Dropdown>
         )}
       </Header>
-      {loading && (
-        <div style={{ textAlign: "center", marginTop: 50 }}>
-          <Spin size="large" />
-        </div>
-      )}
+      <EditProfile
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        updateProfileInContainer={updateProfileInContainer}
+        userData={userData}
+      />
     </Layout>
   );
 };

@@ -1,20 +1,17 @@
-import { useSelector } from "react-redux";
-import { Outlet, Navigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Outlet, Navigate } from 'react-router-dom';
 
+const PrivateRoutes = ({ messageApi }) => {
+  const loginData = sessionStorage.getItem('login');
+  const isAuthenticated = useSelector(state => {
 
-const PrivateRoutes = ({messageApi}) => {
-  const login_data = sessionStorage.getItem("login");
-  const auth_state = useSelector((state) => state.auth.isAuthenticated);
-  const isAuthenticated = login_data ? true : auth_state;
+    return state.auth ? state.auth.isAuthenticated : false;
+  });
 
-  return isAuthenticated ? (
-    <>
-    
-      <Outlet />
-    </>
-  ) : (
-    <Navigate to="/signin" />
-  );
+  
+  const isLoggedIn = loginData || isAuthenticated;
+
+  return isLoggedIn ? <Outlet /> : <Navigate to="/signin" />;
 };
 
 export default PrivateRoutes;

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './SignIn.css';
 import RightSVG from './Right.svg';
-import { useNavigate } from 'react-router-dom';
+import './SignIn.css';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -31,10 +30,12 @@ const Signup = () => {
       });
 
       if (response.status === 200) {
+        const { token } = response.data;
         message.success('Registration successful. You can now sign in.');
-        console.log("Registration successful", response.data);
 
-        
+        localStorage.setItem('userData', JSON.stringify(requestData));
+        localStorage.setItem('token', token);
+
         navigate('/signin');
       } else {
         message.error('Registration failed. Please try again.');
@@ -78,14 +79,17 @@ const Signup = () => {
             </Form.Item>
             <Form.Item
               name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]
-            }>
+              rules={[
+                { required: true, message: 'Please input your email!' },
+                { type: 'email', message: 'Please enter a valid email!' }
+              ]}
+            >
               <Input placeholder="Email" />
             </Form.Item>
             <Form.Item
               name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]
-            }>
+              rules={[{ required: true, message: 'Please input your password!' }]}
+            >
               <Input.Password placeholder="Password" />
             </Form.Item>
             <Form.Item
