@@ -20,5 +20,3 @@ export const fetchSinglePost = createAsyncThunk('posts/fetchSinglePost', async (
     return rejectWithValue('Failed to fetch the post');
   }
 });
-
-// postsReducer.js

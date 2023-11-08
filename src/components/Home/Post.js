@@ -13,6 +13,7 @@ const Post = () => {
   const dispatch = useDispatch();
   const tablePosts = useSelector(state => state.tablePosts.tablePosts);
   const loading = useSelector(state => state.tablePosts.loading);
+  // eslint-disable-next-line
   const error = useSelector(state => state.tablePosts.error);
 
   const [form] = Form.useForm();
@@ -25,15 +26,20 @@ const Post = () => {
     dispatch(fetchTablePostsRequest());
   }, [dispatch]);
 
-  const onFileChange = e => {
+  const onFileChange = (e) => {
     const img = e.target.files[0];
     setSelectedFile(img);
     setFileName(img.name);
   };
 
-  const onFinish = async values => {
+  const onFinish = async (values) => {
     try {
-      await dispatch(createTablePostRequest(values.name, values.content, selectedFile));
+      // const formData = new FormData();
+      // formData.append('name', values.name);
+      // formData.append('content', values.content);
+      // formData.append('image', selectedFile); // Append the selected file
+    console.log(values.name,values.content,selectedFile);
+      await dispatch(createTablePostRequest(values.name,values.content,selectedFile));
       form.resetFields();
       setSelectedFile(null);
       setFileName('');
@@ -46,7 +52,7 @@ const Post = () => {
     }
   };
 
-  const handleDelete = postId => {
+  const handleDelete = (postId) => {
     dispatch(deleteTablePostRequest(postId));
     message.success('Post deleted successfully');
   };
@@ -57,7 +63,7 @@ const Post = () => {
     message.success(`Post ${publishMessage} successfully`);
   };
 
-  const handleSearch = value => {
+  const handleSearch = (value) => {
     setSearchValue(value);
   };
 
@@ -129,8 +135,9 @@ const Post = () => {
             <Form.Item
               label="Image"
               name="image"
-              rules={[{ required: true, message: 'Please input the image!' }]}
+              rules={[{ required: true, message: 'Please upload an image!' }]}
             >
+             
               <input type="file" onChange={onFileChange} accept=".jpg,.jpeg" />
               {selectedFile && <div>{fileName}</div>}
             </Form.Item>
@@ -144,12 +151,12 @@ const Post = () => {
         <h1>Table Posts</h1>
         <Input.Search
           placeholder="Search by post title"
-          onSearch={value => handleSearch(value)}
+          onSearch={(value) => handleSearch(value)}
           style={{ width: 200 }}
         />
         <Table
           columns={columns}
-          dataSource={tablePosts.filter(post =>
+          dataSource={tablePosts.filter((post) =>
             post.name.toLowerCase().includes(searchValue.toLowerCase())
           )}
         />

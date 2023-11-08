@@ -3,10 +3,8 @@ import axios from 'axios';
 
 function* fetchTablePostsSaga() {
   try {
-    
     const token = localStorage.getItem('token');
-    console.log(token);
-    const response = yield call(fetch , 'https://react-assignment-api.mallow-tech.com/api/posts?limit=10&page=1&sort=name&order=desc', {
+    const response = yield call(fetch, 'https://react-assignment-api.mallow-tech.com/api/posts?limit=10&page=1&sort=name&order=desc', {
       headers: {
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
@@ -26,56 +24,42 @@ function* fetchTablePostsSaga() {
 }
 
 function* createTablePostSaga(action) {
+
   try {
-    const token = yield localStorage.getItem('Token');
     const formData = new FormData();
     formData.append('name', action.payload.name);
     formData.append('content', action.payload.content);
-    formData.append('image', action.payload.image, 'filename.jpg');
-
-    const myHeaders = new Headers();
-    myHeaders.append('Authorization', token);
-
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formData,
-      redirect: 'follow',
-    };
-
-    const response = yield fetch('https://react-assignment-api.mallow-tech.com/api/posts', requestOptions);
-    const data = yield response.json();
-
-    if (response.status === 201) {
-      const createdPost = {
-        ...data,
-        content: `${action.payload.content}\nImage URL: ${action.payload.image}`,
-      };
+    formData.append('image', action.payload.image);
+ 
+    const response = yield call(axios.post, 'https://react-assignment-api.mallow-tech.com/api/posts', formData, {
+      headers: {
+        'Authorization': localStorage.getItem('token'),
+      },
+    });
+    
+    if (response.status === 200) {
+      const createdPost = response.data;
       yield put({ type: 'CREATE_TABLE_POST_SUCCESS', payload: createdPost });
-      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' }); // Trigger fetching posts after a successful creation
     } else {
       yield put({ type: 'CREATE_TABLE_POST_FAILURE', error: 'Post creation failed' });
     }
   } catch (error) {
-    console.error('API Error:', error);
+    console.log(error.response.data);
     yield put({ type: 'CREATE_TABLE_POST_FAILURE', error: 'Post creation failed' });
   }
 }
-
 function* deleteTablePostSaga(action) {
   try {
     const apiUrl = `https://react-assignment-api.mallow-tech.com/api/posts/${action.payload}`;
-    
     const response = yield call(axios.delete, apiUrl, {
       headers: {
-        
         'Authorization': localStorage.getItem('token'),
       },
     });
 
     if (response.status === 200) {
       yield put({ type: 'DELETE_TABLE_POST_SUCCESS', payload: action.payload });
-      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' }); 
+      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' });
       yield put({ type: 'SHOW_SUCCESS_MESSAGE', message: 'Post deleted successfully' });
     } else {
       throw new Error(response.statusText || 'Failed to delete table post');
@@ -88,7 +72,6 @@ function* deleteTablePostSaga(action) {
 function* updateTablePostSaga(action) {
   try {
     const apiUrl = `https://react-assignment-api.mallow-tech.com/api/posts/${action.payload.postId}`;
-
     const requestData = {
       name: action.payload.name,
       content: action.payload.content,
@@ -99,13 +82,13 @@ function* updateTablePostSaga(action) {
       headers: {
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': localStorage.getItem('Token'),
+        'Authorization': localStorage.getItem('token'),
       },
     });
 
     if (response.status === 200) {
       yield put({ type: 'UPDATE_TABLE_POST_SUCCESS', payload: response.data });
-      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' }); // Trigger fetching posts after a successful update
+      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' });
     } else {
       throw new Error(response.statusText || 'Failed to update table post');
     }
@@ -122,13 +105,13 @@ function* publishPostSaga(action) {
       headers: {
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': localStorage.getItem('Token'),
+        'Authorization': localStorage.getItem('token'),
       },
     });
 
     if (response.status === 200) {
       yield put({ type: 'PUBLISH_POST_SUCCESS', payload: action.payload });
-      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' }); // Trigger fetching posts after a successful publish
+      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' });
     } else {
       throw new Error(response.statusText || 'Failed to publish post');
     }
@@ -145,13 +128,13 @@ function* unpublishPostSaga(action) {
       headers: {
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': localStorage.getItem('Token'),
+        'Authorization': localStorage.getItem('token'),
       },
     });
 
     if (response.status === 200) {
       yield put({ type: 'UNPUBLISH_POST_SUCCESS', payload: action.payload });
-      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' }); // Trigger fetching posts after a successful unpublish
+      yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' });
     } else {
       throw new Error(response.statusText || 'Failed to unpublish post');
     }

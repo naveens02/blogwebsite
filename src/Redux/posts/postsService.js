@@ -1,12 +1,7 @@
 import axios from 'axios';
 
-const getToken = () => {
-  return localStorage.getItem('Token');
-};
-
-export const fetchPublishedBlogsAPI = async () => {
+export const fetchPublishedBlogsAPI = async (token) => {
   try {
-    const token = getToken();
     const response = await axios.get('https://react-assignment-api.mallow-tech.com/api/public/posts', {
       headers: {
         'Content-Type': 'application/json',
@@ -15,15 +10,13 @@ export const fetchPublishedBlogsAPI = async () => {
       },
     });
     return response.data;
-    
   } catch (error) {
     throw new Error('Failed to fetch published posts');
   }
 };
 
-export const fetchSinglePostAPI = async (postId) => {
+export const fetchSinglePostAPI = async (postId, token) => {
   try {
-    const token = getToken();
     const response = await axios.get(`https://react-assignment-api.mallow-tech.com/api/public/posts/${postId}`, {
       headers: {
         'Content-Type': 'application/json',
@@ -37,4 +30,5 @@ export const fetchSinglePostAPI = async (postId) => {
   }
 };
 
-
+const postsService = { fetchPublishedBlogsAPI, fetchSinglePostAPI };
+export default postsService;
