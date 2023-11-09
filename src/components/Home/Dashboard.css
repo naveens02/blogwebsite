@@ -57,16 +57,15 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
- margin-top: 20px;
+  margin-top: 20px;
 }
 
 .user-name {
   font-weight: bold;
 }
 
-
 .left-panel .post-title {
-  text-align:right;
+  text-align: right;
   font-size: 15px;
   margin-bottom: 10px;
 }
@@ -81,15 +80,79 @@
 /* For the right panel */
 .right-panel .post-image {
   width: 100%;
-  height:fit-content;
+  height: fit-content;
   border-radius: 2px; /* Adjust border-radius as desired */
   margin-bottom: 20px;
 }
-
-
 
 .post-content {
   font-family: 'Arial', sans-serif;
   line-height: 1.5;
   color: #333;
+}
+
+.comment {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  /* Align items to start */
+}
+
+.comment-user {
+  display: flex;
+  align-items: flex-start; /* Align items to start */
+}
+
+.comment-user img {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.comment-user span {
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-left: 10px; 
+  margin-right: -70px;/* Add margin to separate the username and comment text */
+}
+
+.comment-time {
+  font-size: 12px;
+  color: #888;
+  margin-top: 20px;
+ margin-right: -70px;
+ margin-inline-start: 0%;
+ padding-top: 10px;
+}
+
+.comment-text {
+  font-size: 14px;
+  margin-bottom: 5px; 
+  text-align: left;
+  margin-left: 30px;/* Adjust the margin between the comment text and other elements */
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.comment-actions button {
+  margin-left: 10px;
+  color: #888;
+}
+
+.comment:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }

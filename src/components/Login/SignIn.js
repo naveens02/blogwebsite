@@ -30,14 +30,14 @@ const SignIn = ({ messageApi }) => {
           'X-Requested-With': 'XMLHttpRequest',
         },
       });
-
+      console.log(response);
       if (response.status === 200) {
         const userData = {
           token: response.headers.authorization,
           isAuthenticated: true,
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          profile_Pic: response.data.profilePic,
+          firstName: response.data.first_name,
+          lastName: response.data.last_name,
+          profile_Pic: response.data.profile_url,
           // Add any other user data you want to store
         };
 

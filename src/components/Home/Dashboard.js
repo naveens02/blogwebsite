@@ -1,27 +1,32 @@
-// Dashboard.js
-
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, fetchSinglePost } from '../../Redux/posts/postsActions';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import TopBar from './TopBar';
 import axios from 'axios';
 import './Dashboard.css';
-import { Input, Avatar } from 'antd';
+import { Input, Avatar, Button, Tooltip } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const storedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+  const token = localStorage.getItem('token');
+
+  const storedPosts = useMemo(() => {
+    return JSON.parse(localStorage.getItem('posts')) || [];
+  }, []);
+
   const [selectedPost, setSelectedPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchedPosts, setSearchedPosts] = useState([]);
-
-  const token = localStorage.getItem('token');
-
+  const [commentText, setCommentText] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedComment, setEditedComment] = useState('');
+  const [profile, setprofile] = useState(null);
   useEffect(() => {
     if (storedPosts.length > 0) {
-      dispatch(fetchPosts.fulfilled(storedPosts));
+      dispatch({ type: 'FETCH_POSTS', payload: storedPosts });
       setLoading(false);
+      setSelectedPost(storedPosts[0]);
     } else {
       if (token) {
         axios.get('https://react-assignment-api.mallow-tech.com/api/public/posts', {
@@ -32,10 +37,14 @@ const Dashboard = () => {
           .then((response) => {
             setLoading(false);
             localStorage.setItem('posts', JSON.stringify(response.data));
-            dispatch(fetchPosts.fulfilled(response.data));
+            dispatch({ type: 'FETCH_POSTS', payload: response.data });
+
+            if (response.data.length > 0) {
+              setSelectedPost(response.data[0]);
+            }
           })
           .catch((error) => {
-            setError('Failed to fetch data');
+            setError('Failed to fetch data. Please try again later.');
             setLoading(false);
           });
       } else {
@@ -43,9 +52,11 @@ const Dashboard = () => {
         setLoading(false);
       }
     }
-  }, [dispatch, token, storedPosts.length]);
+  }, [dispatch, token, storedPosts]);
 
-  const handlePostClick = (postId) => {
+  const handlePostClick = (postId, post) => {
+    console.log(post.user);
+    setprofile(post.user);
     if (token) {
       axios.get(`https://react-assignment-api.mallow-tech.com/api/public/posts/${postId}`, {
         headers: {
@@ -54,7 +65,8 @@ const Dashboard = () => {
       })
         .then((response) => {
           setSelectedPost(response.data);
-          dispatch(fetchSinglePost(postId));
+
+          dispatch({ type: 'FETCH_SINGLE_POST', payload: response.data });
         })
         .catch((error) => {
           setError('Failed to fetch selected post');
@@ -66,6 +78,7 @@ const Dashboard = () => {
     }
   };
 
+
   const handleSearch = (value) => {
     const filteredPosts = storedPosts.filter(post =>
       post.name.toLowerCase().includes(value.toLowerCase())
@@ -74,6 +87,72 @@ const Dashboard = () => {
   };
 
   const postsToDisplay = searchedPosts.length > 0 ? searchedPosts : storedPosts;
+
+  const createComment = async () => {
+    try {
+      const response = await axios.post(
+        `https://react-assignment-api.mallow-tech.com/api/posts/${selectedPost.id}/comments`,
+        { comment: commentText },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      const newComment = response.data;
+      const updatedSelectedPost = { ...selectedPost, comments: [...selectedPost.comments, newComment] };
+
+      setSelectedPost(updatedSelectedPost);
+
+      setCommentText('');
+    } catch (error) {
+      setError('Failed to create a comment');
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    try {
+      await axios.delete(`https://react-assignment-api.mallow-tech.com/api/posts/comments/${commentId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const updatedComments = selectedPost.comments.filter(comment => comment.id !== commentId);
+      const updatedSelectedPost = { ...selectedPost, comments: updatedComments };
+      setSelectedPost(updatedSelectedPost);
+    } catch (error) {
+      setError('Failed to delete the comment (It is not created by you)');
+    }
+  };
+
+  const editComment = async (commentId) => {
+    try {
+      const response = await axios.patch(
+        `https://react-assignment-api.mallow-tech.com/api/posts/comments/${commentId}`,
+        { comment: editedComment },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      const updatedComment = response.data;
+      const updatedComments = selectedPost.comments.map(comment =>
+        comment.id === commentId ? updatedComment : comment
+      );
+
+      const updatedSelectedPost = { ...selectedPost, comments: updatedComments };
+      setSelectedPost(updatedSelectedPost);
+
+      setEditingCommentId(null);
+      setEditedComment('');
+    } catch (error) {
+      setError('Failed to edit the comment (your comment alone can be edited)');
+    }
+  };
 
   return (
     <div className="dashboard-container">
@@ -87,7 +166,7 @@ const Dashboard = () => {
             style={{ width: 200, marginBottom: 20 }}
           />
           {postsToDisplay && postsToDisplay.length > 0 && postsToDisplay.map((post) => (
-            <div key={post.id} onClick={() => handlePostClick(post.id)} className="post-item">
+            <div key={post.id} onClick={() => handlePostClick(post.id, post)} className="post-item">
               <div className="post-info">
                 <img src={post.image_url} alt={post.name} className="post-image" />
                 <div className="post-details">
@@ -107,19 +186,89 @@ const Dashboard = () => {
             ) : selectedPost ? (
               <div>
                 <div className="user-info">
-                  {selectedPost.user && selectedPost.user.profile_url ? (
-                    <Avatar src={selectedPost.user.profile_url} />
+                  {profile ? (
+                    <Avatar src={profile.profile_url} />
                   ) : (
                     <Avatar icon="user" />
                   )}
-                  <span className="user-name">{selectedPost.user?.first_name || 'Anonymous'}</span>
+                  <span className="user-name">{profile ? profile.first_name : ''}</span>
                 </div>
                 <div className="post-details">
-                 
                   <img src={selectedPost.image_url} alt="Post" className="post-image" />
                   <h2 className="post-title">{selectedPost.name}</h2>
                   <p className="post-content">{selectedPost.content}</p>
                 </div>
+                <div className="comment-section">
+              <h3>Comments</h3>
+              <Input.TextArea
+                placeholder="Write a comment"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                onPressEnter={createComment}
+              />
+            {selectedPost.comments && selectedPost.comments.length > 0 ? (
+  selectedPost.comments.map(comment => (
+    <div key={comment.id} className="comment">
+       <div className="comment-content">
+                  <div className="comment-header">
+                    <div className="comment-user">
+                      {comment.user && comment.user.profile_url ? (
+                        <>
+                          <img src={comment.user.profile_url} alt="Profile" className="user-avatar" />
+                          <span className="user-name">{comment.user.first_name}</span>
+                        </>
+                      ) : (
+                        <>
+                          <img src="placeholder_image_url" alt="Profile" className="user-avatar" />
+                          <span className="user-name">Unknown User</span>
+                        </>
+                      )}
+                      <span className="comment-time">{new Date(comment.created_at).toLocaleString()}</span>
+                    </div>
+                    <div className="comment-actions">
+                      {editingCommentId === comment.id ? (
+                        <div>
+                          <Input
+                            value={editedComment}
+                            onChange={(e) => setEditedComment(e.target.value)}
+                            onPressEnter={() => editComment(comment.id)}
+                          />
+                          <Button onClick={() => editComment(comment.id)}>Submit</Button>
+                        </div>
+                      ) : (
+                        <div className="comment-text">
+                          <p>{comment.comment}</p>
+                          <div className="comment-buttons">
+                            <Tooltip title="Edit">
+                              <Button
+                                type="text"
+                                icon={<EditOutlined />}
+                                onClick={() => {
+                                  setEditingCommentId(comment.id);
+                                  setEditedComment(comment.comment);
+                                }}
+                              />
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                              <Button
+                                type="text"
+                                icon={<DeleteOutlined />}
+                                onClick={() => deleteComment(comment.id)}
+                              />
+                            </Tooltip>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {/* Additional comment content if any */}
+                </div>
+    </div>
+  ))
+) : (
+  <p>No comments available</p>
+)}
+            </div>
               </div>
             ) : (
               <p>No post selected</p>
@@ -129,6 +278,7 @@ const Dashboard = () => {
       </div>
     </div>
   );
+
 };
 
 export default Dashboard;

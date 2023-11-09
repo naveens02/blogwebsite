@@ -18,14 +18,14 @@ const TopBar = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileData, setProfileData] = useState({}); // State to store user profile data
-
+  const UserData=localStorage.getItem('UserData');
   useEffect(() => {
-    if (userData.isAuthenticated) {
+    if (UserData.isAuthenticated) {
       // Set the profile data if the user is authenticated and user data is available
-      setProfileData(userData);
+      setProfileData(UserData);
     } else {
       // Retrieve UserData from localStorage
-      const userDataString = localStorage.getItem('userData');
+      const userDataString = localStorage.getItem('UserData');
 
       if (userDataString) {
         // Parse the UserData string into an object
@@ -39,7 +39,7 @@ const TopBar = () => {
         setProfileData({});
       }
     }
-  }, [userData]);
+  }, [UserData]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -80,7 +80,8 @@ const TopBar = () => {
     <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
   );
 
-  const firstName = userData.first_name || profileData.first_name || 'Guest';
+
+  const firstName = UserData.firstName || profileData.firstName || 'Guest';
 
   return (
     <Layout>
