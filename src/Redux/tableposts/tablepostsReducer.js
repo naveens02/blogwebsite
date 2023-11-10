@@ -72,7 +72,19 @@ const tablepostsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-
+      case 'UPDATE_TABLE_POST_SUCCESS':
+        const updatedPosts = state.tablePosts.map((post) => {
+          if (post.id === action.payload.id) {
+            return action.payload;
+          }
+          return post;
+        });
+        return {
+          ...state,
+          tablePosts: updatedPosts,
+          loading: false,
+          error: null,
+        };
     case 'PUBLISH_POST_FAILURE':
     case 'UNPUBLISH_POST_FAILURE':
       return {

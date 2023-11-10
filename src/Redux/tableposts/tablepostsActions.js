@@ -20,6 +20,10 @@ export const publishPostRequest = (postId) => ({
   type: 'PUBLISH_POST_REQUEST',
   payload: postId,
 });
+export const updateTablePostRequest = (postId, name, content, image) => ({
+  type: 'UPDATE_TABLE_POST_REQUEST',
+  payload: { postId, name, content, image },
+});
 
 export const unpublishPostRequest = (postId) => ({
   type: 'UNPUBLISH_POST_REQUEST',

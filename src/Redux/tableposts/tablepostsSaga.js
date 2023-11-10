@@ -150,5 +150,6 @@ export function* watchTablePosts() {
   yield takeLatest('UPDATE_TABLE_POST_REQUEST', updateTablePostSaga);
   yield takeLatest('PUBLISH_POST_REQUEST', publishPostSaga);
   yield takeLatest('UNPUBLISH_POST_REQUEST', unpublishPostSaga);
+  yield takeLatest('UPDATE_TABLE_POST_REQUEST', updateTablePostSaga)
   // Add other takeLatest calls for remaining actions if available
 }
