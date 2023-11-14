@@ -1,3 +1,4 @@
+// Post.js
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Table, Modal, message, Spin, Upload, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,9 +64,7 @@ const Post = () => {
     setSearchValue(value);
   };
 
-  const handleEdit = (postId) => {
-    window.location.href = `/edit/${postId}`;
-  };
+
 
   const columns = [
     {
@@ -98,11 +97,7 @@ const Post = () => {
           <Button className='button' type="primary" onClick={() => handlePublish(record.id, record.published)}>
             {record.published ? 'Unpublish' : 'Publish'}
           </Button>
-          <Button className='button' type="primary">
-            <Link to={`/edit/${record.id}`} onClick={() => handleEdit(record.id)}>
-              Edit
-            </Link>
-          </Button>
+         
         </Space>
       ),
     },

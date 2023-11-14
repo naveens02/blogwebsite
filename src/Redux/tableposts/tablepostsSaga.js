@@ -4,13 +4,7 @@ import axios from 'axios';
 function* fetchTablePostsSaga() {
   try {
     const token = localStorage.getItem('token');
-    const response = yield call(fetch, 'https://react-assignment-api.mallow-tech.com/api/posts?limit=10&page=1&sort=name&order=desc', {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': token,
-      },
-    });
+    const response = yield call(fetchTablePosts, token);
 
     if (response.ok) {
       const data = yield response.json();
@@ -24,19 +18,14 @@ function* fetchTablePostsSaga() {
 }
 
 function* createTablePostSaga(action) {
-
   try {
     const formData = new FormData();
     formData.append('name', action.payload.name);
     formData.append('content', action.payload.content);
     formData.append('image', action.payload.image);
  
-    const response = yield call(axios.post, 'https://react-assignment-api.mallow-tech.com/api/posts', formData, {
-      headers: {
-        'Authorization': localStorage.getItem('token'),
-      },
-    });
-    
+    const response = yield call(createTablePost, formData);
+
     if (response.status === 200) {
       const createdPost = response.data;
       yield put({ type: 'CREATE_TABLE_POST_SUCCESS', payload: createdPost });
@@ -48,6 +37,7 @@ function* createTablePostSaga(action) {
     yield put({ type: 'CREATE_TABLE_POST_FAILURE', error: 'Post creation failed' });
   }
 }
+
 function* deleteTablePostSaga(action) {
   try {
     const apiUrl = `https://react-assignment-api.mallow-tech.com/api/posts/${action.payload}`;
@@ -78,13 +68,7 @@ function* updateTablePostSaga(action) {
       image: action.payload.image,
     };
 
-    const response = yield call(axios.patch, apiUrl, requestData, {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': localStorage.getItem('token'),
-      },
-    });
+    const response = yield call(updateTablePost, apiUrl, requestData);
 
     if (response.status === 200) {
       yield put({ type: 'UPDATE_TABLE_POST_SUCCESS', payload: response.data });
@@ -95,6 +79,34 @@ function* updateTablePostSaga(action) {
   } catch (error) {
     yield put({ type: 'UPDATE_TABLE_POST_FAILURE', error: error.message });
   }
+}
+
+function fetchTablePosts(token) {
+  return fetch('https://react-assignment-api.mallow-tech.com/api/posts?limit=10&page=1&sort=name&order=desc', {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'Authorization': token,
+    },
+  });
+}
+
+function createTablePost(formData) {
+  return axios.post('https://react-assignment-api.mallow-tech.com/api/posts', formData, {
+    headers: {
+      'Authorization': localStorage.getItem('token'),
+    },
+  });
+}
+
+function updateTablePost(apiUrl, requestData) {
+  return axios.patch(apiUrl, requestData, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'Authorization': localStorage.getItem('token'),
+    },
+  });
 }
 
 function* publishPostSaga(action) {
@@ -150,6 +162,5 @@ export function* watchTablePosts() {
   yield takeLatest('UPDATE_TABLE_POST_REQUEST', updateTablePostSaga);
   yield takeLatest('PUBLISH_POST_REQUEST', publishPostSaga);
   yield takeLatest('UNPUBLISH_POST_REQUEST', unpublishPostSaga);
-  yield takeLatest('UPDATE_TABLE_POST_REQUEST', updateTablePostSaga)
   // Add other takeLatest calls for remaining actions if available
 }

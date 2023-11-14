@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, message, Spin } from 'antd';
+import { Form, Input, Button, message, Spin, Checkbox } from 'antd';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../Redux/authSlice';
 import axios from 'axios';
 import RightSVG from './Right.svg';
-import './SignIn.css';
 
 const SignIn = ({ messageApi }) => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const SignIn = ({ messageApi }) => {
           'X-Requested-With': 'XMLHttpRequest',
         },
       });
-      console.log(response);
+
       if (response.status === 200) {
         const userData = {
           token: response.headers.authorization,
@@ -38,15 +38,14 @@ const SignIn = ({ messageApi }) => {
           firstName: response.data.first_name,
           lastName: response.data.last_name,
           profile_Pic: response.data.profile_url,
-          // Add any other user data you want to store
         };
 
         dispatch(loginSuccess(userData));
 
-        const token=response.headers.get('Authorization');
-        localStorage.setItem('token',token);// Save user data in local storage
+        const token = response.headers.get('Authorization');
+        localStorage.setItem('token', token);
         localStorage.setItem('UserData', JSON.stringify(userData));
-           
+
         message.success('Login successful');
         navigate('/dashboard');
       } else {
@@ -95,6 +94,15 @@ const SignIn = ({ messageApi }) => {
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
             <Input.Password placeholder="Password" />
+          </Form.Item>
+
+          <Form.Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ marginRight: '40px' }}>
+              <Checkbox>Save Password</Checkbox>
+            </span>
+            <span className="">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </span>
           </Form.Item>
 
           {loading && <Spin />}

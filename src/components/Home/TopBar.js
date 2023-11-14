@@ -11,31 +11,25 @@ import './TopBar.css';
 const { Header } = Layout;
 
 const TopBar = () => {
-  const userData = useSelector((state) => state.auth); // Access user data from Redux state
+  const userData = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profileData, setProfileData] = useState({}); // State to store user profile data
-  const UserData=localStorage.getItem('UserData');
+  const [profileData, setProfileData] = useState({});
+  const UserData = localStorage.getItem('UserData');
+
   useEffect(() => {
     if (UserData.isAuthenticated) {
-      // Set the profile data if the user is authenticated and user data is available
       setProfileData(UserData);
     } else {
-      // Retrieve UserData from localStorage
       const userDataString = localStorage.getItem('UserData');
 
       if (userDataString) {
-        // Parse the UserData string into an object
         const userDataFromLocalStorage = JSON.parse(userDataString);
-
-        // Update the profile data with the retrieved data from localStorage
         setProfileData(userDataFromLocalStorage);
       } else {
-        // If no user data found in local storage and user is not authenticated,
-        // set an initial state for profileData
         setProfileData({});
       }
     }
@@ -43,7 +37,7 @@ const TopBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    localStorage.removeItem('token'); // Assuming 'token' is stored in localStorage
+    localStorage.removeItem('token');
     navigate('/signin');
   };
 
@@ -80,7 +74,6 @@ const TopBar = () => {
     <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
   );
 
-
   const firstName = UserData.firstName || profileData.firstName || 'Guest';
 
   return (
@@ -99,10 +92,16 @@ const TopBar = () => {
             />
           </div>
           <div className="menu-links">
-            <Link to="/dashboard" className={location.pathname === '/dashboard' ? 'active' : ''}>
+            <Link
+              to="/dashboard"
+              className={`menu-link ${location.pathname === '/dashboard' ? 'active' : ''}`}
+            >
               Dashboard
             </Link>
-            <Link to="/post" className={location.pathname === '/post' ? 'active' : ''}>
+            <Link
+              to="/post"
+              className={`menu-link ${location.pathname === '/post' ? 'active' : ''}`}
+            >
               Post
             </Link>
           </div>

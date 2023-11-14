@@ -37,7 +37,7 @@ const PostPreview = () => {
       {post && (
         <div className="PostPreview">
           <Link to="/post" className="BackButton">
-          Back
+          ← Back
           </Link>
           <Button type="link" onClick={handleDelete} className="DeleteButton">
             Delete

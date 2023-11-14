@@ -9,7 +9,9 @@ const tablepostsReducer = (state = initialState, action) => {
     case 'FETCH_TABLE_POSTS_REQUEST':
     case 'CREATE_TABLE_POST_REQUEST':
     case 'DELETE_TABLE_POST_REQUEST':
-      console.log(action.payload);
+    case 'UPDATE_TABLE_POST_REQUEST':
+    case 'PUBLISH_POST_REQUEST':
+    case 'UNPUBLISH_POST_REQUEST':
       return { ...state, loading: true, error: null };
 
     case 'FETCH_TABLE_POSTS_SUCCESS':
@@ -36,13 +38,18 @@ const tablepostsReducer = (state = initialState, action) => {
         error: null,
       };
 
-    case 'FETCH_TABLE_POSTS_FAILURE':
-    case 'CREATE_TABLE_POST_FAILURE':
-    case 'DELETE_TABLE_POST_FAILURE':
+    case 'UPDATE_TABLE_POST_SUCCESS':
+      const updatedPosts = state.tablePosts.map((post) => {
+        if (post.id === action.payload.id) {
+          return action.payload;
+        }
+        return post;
+      });
       return {
         ...state,
+        tablePosts: updatedPosts,
         loading: false,
-        error: action.error,
+        error: null,
       };
 
     case 'PUBLISH_POST_SUCCESS':
@@ -72,19 +79,11 @@ const tablepostsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-      case 'UPDATE_TABLE_POST_SUCCESS':
-        const updatedPosts = state.tablePosts.map((post) => {
-          if (post.id === action.payload.id) {
-            return action.payload;
-          }
-          return post;
-        });
-        return {
-          ...state,
-          tablePosts: updatedPosts,
-          loading: false,
-          error: null,
-        };
+
+    case 'FETCH_TABLE_POSTS_FAILURE':
+    case 'CREATE_TABLE_POST_FAILURE':
+    case 'DELETE_TABLE_POST_FAILURE':
+    case 'UPDATE_TABLE_POST_FAILURE':
     case 'PUBLISH_POST_FAILURE':
     case 'UNPUBLISH_POST_FAILURE':
       return {

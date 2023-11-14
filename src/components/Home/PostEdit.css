@@ -1,0 +1,44 @@
+/* PostEdit.css */
+
+.post-edit-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .form-container {
+    padding: 20px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+  }
+  
+  .form-container p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .form-item {
+    margin-bottom: 16px;
+  }
+  
+  /* Add spacing between form items */
+  .form-item:not(:last-child) {
+    margin-bottom: 50px;
+  }
+  .BackButton {
+    display: inline-block;
+    padding: 5px 10px; /* Adjust the padding as needed */
+    margin-bottom: 20px;
+    background-color: #a2a2a2; /* Cement color */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px; 
+  }
+
+  .form-container {
+    /* existing styles for form-container */
+  }
+  /* You can adjust the spacing as needed */
+  

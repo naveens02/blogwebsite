@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, Row, Col } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import RightSVG from './Right.svg';
@@ -65,18 +65,25 @@ const Signup = () => {
         >
           <div className="form-content">
             <h1>Create an Account</h1>
-            <Form.Item
-              name="firstName"
-              rules={[{ required: true, message: 'Please input your first name!' }]}
-            >
-              <Input placeholder="First Name" />
-            </Form.Item>
-            <Form.Item
-              name="lastName"
-              rules={[{ required: true, message: 'Please input your last name!' }]}
-            >
-              <Input placeholder="Last Name" />
-            </Form.Item>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="firstName"
+                  rules={[{ required: true, message: 'Please input your first name!' }]}
+                >
+                  <Input placeholder="First Name" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="lastName"
+                  rules={[{ required: true, message: 'Please input your last name!' }]}
+                >
+                  <Input placeholder="Last Name" />
+                </Form.Item>
+              </Col>
+            </Row>
+
             <Form.Item
               name="email"
               rules={[
