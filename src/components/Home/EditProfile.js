@@ -1,4 +1,4 @@
-// EditProfile.js
+
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Space, Input, Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -22,8 +22,8 @@ function EditProfile({ isModalOpen, setIsModalOpen, userData, updateProfileInCon
   const beforeUpload = async (file) => {
     const base64 = await convertFileToBase64(file);
     setSelectedFile(base64);
-    setFileName(file.name); // Set the file name separately
-    return false; // Prevent default upload behavior
+    setFileName(file.name); 
+    return false; 
   };
 
   const convertFileToBase64 = (file) => {
@@ -40,7 +40,7 @@ function EditProfile({ isModalOpen, setIsModalOpen, userData, updateProfileInCon
     const updatedLastName = values.lastname;
     const updatedImage = selectedFile || userData.profile_Pic;
 
-    // Update data in localStorage
+    
     const updatedUserData = { ...userData, first_name: updatedFirstName, last_name: updatedLastName, profile_Pic: updatedImage };
     localStorage.setItem('userData', JSON.stringify(updatedUserData));
 

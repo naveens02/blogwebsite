@@ -1,4 +1,3 @@
-// Post.js
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Table, Modal, message, Spin, Upload, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +6,7 @@ import {
   fetchTablePostsRequest,
   deleteTablePostRequest,
   updatePostPublishRequest,
+  updateTablePostRequest,
 } from '../../Redux/tableposts/tablepostsActions';
 import { Link } from 'react-router-dom';
 
@@ -17,12 +17,14 @@ const Post = () => {
   const dispatch = useDispatch();
   const tablePosts = useSelector((state) => state.tablePosts.tablePosts);
   const loading = useSelector((state) => state.tablePosts.loading);
-
+  const posts = useSelector((state) => state.dashboard.posts); 
   const [form] = Form.useForm();
   const [searchValue, setSearchValue] = useState('');
   const [visible, setVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
+  const [editingPost, setEditingPost] = useState(null);
 
   useEffect(() => {
     dispatch(fetchTablePostsRequest());
@@ -48,23 +50,66 @@ const Post = () => {
     }
   };
 
+  const onEditFinish = async (values) => {
+    try {
+      await dispatch(updateTablePostRequest(editingPost.id, values.name, values.content, selectedFile));
+      form.resetFields();
+      setEditModalVisible(false);
+      message.success('Post updated successfully');
+      dispatch(fetchTablePostsRequest());
+    } catch (error) {
+      console.error('Error updating post:', error);
+      message.error('Post update failed');
+    }
+  };
+
   const handleDelete = (postId) => {
     dispatch(deleteTablePostRequest(postId));
     message.success('Post deleted successfully');
     dispatch(fetchTablePostsRequest());
   };
 
-  const handlePublish = (postId, published) => {
-    dispatch(updatePostPublishRequest(postId, !published));
-    const publishMessage = published ? 'unpublished' : 'published';
-    message.success(`Post ${publishMessage} successfully`);
+  const handlePublish = async (postId, published) => {
+    try {
+      await dispatch(updatePostPublishRequest(postId, !published));
+
+      // Update the local storage with the changed is_published value
+      const updatedTablePosts = tablePosts.map((post) =>
+        post.id === postId ? { ...post, is_published: !published } : post
+      );
+
+      localStorage.setItem('tablePosts', JSON.stringify(updatedTablePosts));
+
+      // Remove the post from the 'posts' data in local storage if unpublished
+      if (!published) {
+        const updatedPosts = posts.filter(post => post.id !== postId);
+        localStorage.setItem('posts', JSON.stringify(updatedPosts ));
+        
+      }
+
+      message.success(`Post ${published ? 'unpublished' : 'published'} successfully`);
+      dispatch(fetchTablePostsRequest()); // Fetch updated posts after publishing
+    } catch (error) {
+      console.error('Error updating post publish status:', error);
+      message.error(`Post ${published ? 'unpublish' : 'publish'} failed`);
+    }
   };
+
+ 
 
   const handleSearch = (value) => {
     setSearchValue(value);
   };
 
-
+  const handleEdit = (postId) => {
+    const postToEdit = tablePosts.find((post) => post.id === postId);
+    setEditingPost(postToEdit);
+    form.setFieldsValue({
+      name: postToEdit.name,
+      content: postToEdit.content,
+    });
+    setEditModalVisible(true);
+  };
 
   const columns = [
     {
@@ -94,10 +139,12 @@ const Post = () => {
           <Button className='DeleteButton' type="link" onClick={() => handleDelete(record.id)}>
             Delete
           </Button>
-          <Button className='button' type="primary" onClick={() => handlePublish(record.id, record.published)}>
-            {record.published ? 'Unpublish' : 'Publish'}
+          <Button className='button' type="primary" onClick={() => handlePublish(record.id, record.is_published)}>
+            {record.is_published ? 'Unpublish' : 'Publish'}
           </Button>
-         
+          <Button className='button' type="primary" onClick={() => handleEdit(record.id)}>
+            Edit
+          </Button>
         </Space>
       ),
     },
@@ -118,13 +165,17 @@ const Post = () => {
           className="search-input"
         />
         <Modal
-          title="Create New Post"
-          visible={visible}
-          onCancel={() => setVisible(false)}
+          title={editingPost ? "Edit Post" : "Create New Post"}
+          visible={visible || editModalVisible}
+          onCancel={() => {
+            setVisible(false);
+            setEditModalVisible(false);
+            setEditingPost(null);
+          }}
           footer={null}
           className="post-form-modal"
         >
-          <Form form={form} onFinish={onFinish}>
+          <Form form={form} onFinish={editingPost ? onEditFinish : onFinish}>
             <Form.Item
               label="Name"
               name="name"
@@ -159,7 +210,7 @@ const Post = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {editingPost ? 'Update' : 'Submit'}
               </Button>
             </Form.Item>
           </Form>

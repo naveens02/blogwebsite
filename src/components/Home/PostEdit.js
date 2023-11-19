@@ -1,12 +1,10 @@
-// PostEdit.js
-
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Spin, message, Upload, Image } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTablePostRequest } from '../../Redux/tableposts/tablepostsActions';
 import { useParams, Link } from 'react-router-dom';
 
-import './PostEdit.css'; // Import your CSS file
+import './PostEdit.css';
 
 const PostEdit = () => {
   const dispatch = useDispatch();
@@ -17,6 +15,7 @@ const PostEdit = () => {
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // Set initial form values when post data is available
   useEffect(() => {
     if (post) {
       form.setFieldsValue({
@@ -26,12 +25,14 @@ const PostEdit = () => {
     }
   }, [form, post]);
 
+  // Handle file change for the image upload
   const onFileChange = (info) => {
     if (info.file.status === 'done') {
       setSelectedFile(info.file.originFileObj);
     }
   };
 
+  // Handle update button click
   const handleUpdate = async (values) => {
     try {
       const formData = new FormData();
@@ -41,7 +42,8 @@ const PostEdit = () => {
         formData.append('image', selectedFile);
       }
 
-      await dispatch(updateTablePostRequest(postId, values.name, values.content, selectedFile));
+      // Dispatch the update action
+      dispatch(updateTablePostRequest(postId, values.name, values.content, formData));
 
       message.success('Post updated successfully');
     } catch (error) {
@@ -53,10 +55,10 @@ const PostEdit = () => {
   return (
     <Spin spinning={!post} size="large">
       <div className="post-edit-container">
-        <Link to="/post" className="BackButton">
-          ← Back
-        </Link>
         <div className="form-container">
+          <Link to="/post" className="BackButton">
+            ← Back
+          </Link>
           <p>Edit Post</p>
           {post && (
             <div>

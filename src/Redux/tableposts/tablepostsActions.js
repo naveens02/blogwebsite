@@ -14,7 +14,7 @@ export const fetchTablePostsRequest = () => ({
     type: 'DELETE_TABLE_POST_REQUEST',
     payload: postId,
   });
-  // tablepostsActions.js
+ 
 
 export const publishPostRequest = (postId) => ({
   type: 'PUBLISH_POST_REQUEST',

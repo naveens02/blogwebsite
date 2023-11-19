@@ -19,7 +19,7 @@ const AppRoutes = () => {
         <Route element={<Dashboard />} path="/dashboard" />
         <Route element={<Post />} path="/post" />
         <Route path="/preview/:postId" element={<PostPreview />} />
-        <Route path="/edit/:postId" element={<PostEdit />} />
+        <Route path="/edit/:postId"  element={<PostEdit/>} />
       </Route>
     </Routes>
   );

@@ -62,25 +62,44 @@ function* deleteTablePostSaga(action) {
 function* updateTablePostSaga(action) {
   try {
     const apiUrl = `https://react-assignment-api.mallow-tech.com/api/posts/${action.payload.postId}`;
-    const requestData = {
-      name: action.payload.name,
-      content: action.payload.content,
-      image: action.payload.image,
-    };
+    const formData = new FormData();
+    formData.append('name', action.payload.name);
+    formData.append('content', action.payload.content);
+    formData.append('image', action.payload.image);
+    formData.append('_method', 'patch'); // This is required for Laravel to treat it as a PATCH request
 
-    const response = yield call(updateTablePost, apiUrl, requestData);
+    const response = yield call(fetch, apiUrl, {
+      method: 'POST', // Use POST as per your provided request method
+      headers: {
+        'Authorization': localStorage.getItem('token'),
+      },
+      body: formData,
+    });
 
     if (response.status === 200) {
-      yield put({ type: 'UPDATE_TABLE_POST_SUCCESS', payload: response.data });
+      const updatedPost = yield response.json();
+
+      // Update local storage
+      const storedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+      const updatedPosts = storedPosts.map((post) => {
+        if (post.id === updatedPost.id) {
+          return updatedPost;
+        }
+        return post;
+      });
+      localStorage.setItem('posts', JSON.stringify(updatedPosts));
+
+      yield put({ type: 'UPDATE_TABLE_POST_SUCCESS', payload: updatedPost });
       yield put({ type: 'FETCH_TABLE_POSTS_REQUEST' });
+      yield put({ type: 'SHOW_SUCCESS_MESSAGE', message: 'Post updated successfully1' });
     } else {
       throw new Error(response.statusText || 'Failed to update table post');
     }
   } catch (error) {
     yield put({ type: 'UPDATE_TABLE_POST_FAILURE', error: error.message });
+    yield put({ type: 'SHOW_ERROR_MESSAGE', message: 'Post update failed' });
   }
 }
-
 function fetchTablePosts(token) {
   return fetch('https://react-assignment-api.mallow-tech.com/api/posts?limit=10&page=1&sort=name&order=desc', {
     headers: {

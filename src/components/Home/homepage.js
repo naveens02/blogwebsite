@@ -1,16 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TopBar from './TopBar';
-import Dashboard from './Dashboard'; // Your Dashboard component
-import Post from './Post'; // Your Post component
-
+import Dashboard from './Dashboard'; 
+import Post from './Post'; 
 const homepage = () => {
   return (
     <Router>
-      <TopBar /> {/* Render the TopBar component */}
+      <TopBar />
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} /> {/* Dashboard route */}
-        <Route path="/post" element={<Post />} /> {/* Post route */}
+        <Route path="/dashboard" element={<Dashboard />} /> 
+        <Route path="/post" element={<Post />} /> 
       </Routes>
     </Router>
   );

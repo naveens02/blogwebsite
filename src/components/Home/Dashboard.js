@@ -1,13 +1,10 @@
-// Dashboard.js
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import TopBar from './TopBar';
 import axios from 'axios';
 import './Dashboard.css';
-import { Input, Avatar, Button, Tooltip } from 'antd';
+import { Input, Avatar, Button, Tooltip, message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { message } from 'antd';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -111,6 +108,9 @@ const Dashboard = () => {
 
       setSelectedPost(updatedSelectedPost);
       setCommentText('');
+
+      // Show success message
+      message.success('Comment created successfully');
     } catch (error) {
       setError('Failed to create a comment');
     }
@@ -176,10 +176,8 @@ const Dashboard = () => {
       // Update the profile information after deleting a comment
       setProfile(selectedPost.user);
 
-      // Show success message
       message.success('Comment deleted successfully');
     } catch (error) {
-      // Show error message
       message.error('Failed to delete the comment (It is not created by you)');
     }
   };
