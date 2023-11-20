@@ -18,10 +18,10 @@
   z-index: 1;
   box-sizing: border-box;
   overflow: hidden;
-  background-color: #fff; /* Set background color */
-  border: 1px solid #e8e8e8; /* Add border */
-  border-radius: 5px; /* Optional: Add border-radius for rounded corners */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for a subtle lift */
+  background-color: #fff; 
+  border: 1px solid #e8e8e8; 
+  border-radius: 5px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
 .form-content {

@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { fetchPosts, fetchSinglePost } from './postsSlice'; // Correct import from postsSlice, not postsService
+import { fetchPosts, fetchSinglePost } from './postsSlice'; 
 
-import { fetchPublishedBlogsAPI, fetchSinglePostAPI } from './postsService'; // You already have these imports, make sure they are used within the saga
+import { fetchPublishedBlogsAPI, fetchSinglePostAPI } from './postsService'; 
 
 function* fetchPostsSaga() {
   try {
@@ -10,7 +10,7 @@ function* fetchPostsSaga() {
     yield put(fetchPosts.fulfilled(response)); 
     localStorage.setItem('posts', JSON.stringify(response));
   } catch (error) {
-    yield put(fetchPosts.rejected('Failed to fetch published posts')); // Dispatching the action on failure
+    yield put(fetchPosts.rejected('Failed to fetch published posts')); 
   }
 }
 
@@ -18,10 +18,10 @@ function* fetchSinglePostSaga(action) {
   try {
     const token = localStorage.getItem('Token');
     const response = yield call(fetchSinglePostAPI, action.payload, token);
-    yield put(fetchSinglePost.fulfilled(response)); // Dispatching the action on success
+    yield put(fetchSinglePost.fulfilled(response)); 
     localStorage.setItem('selectedPost', JSON.stringify(response));
   } catch (error) {
-    yield put(fetchSinglePost.rejected('Failed to fetch the post')); // Dispatching the action on failure
+    yield put(fetchSinglePost.rejected('Failed to fetch the post')); 
   }
 }
 

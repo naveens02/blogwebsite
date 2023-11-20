@@ -109,7 +109,7 @@ const Dashboard = () => {
       setSelectedPost(updatedSelectedPost);
       setCommentText('');
 
-      // Show success message
+     
       message.success('Comment created successfully');
     } catch (error) {
       setError('Failed to create a comment');
@@ -139,16 +139,16 @@ const Dashboard = () => {
       };
       setSelectedPost(updatedSelectedPost);
 
-      // Update the profile information after editing a comment
+      
       setProfile(selectedPost.user);
 
       setEditingCommentId(null);
       setEditedComment('');
 
-      // Show success message
+      
       message.success('Comment edited successfully');
     } catch (error) {
-      // Show error message
+      
       message.error('Failed to edit the comment (your comment alone can be edited)');
     }
   };
@@ -173,7 +173,7 @@ const Dashboard = () => {
       };
       setSelectedPost(updatedSelectedPost);
 
-      // Update the profile information after deleting a comment
+     
       setProfile(selectedPost.user);
 
       message.success('Comment deleted successfully');

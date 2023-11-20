@@ -73,14 +73,14 @@ const Post = () => {
     try {
       await dispatch(updatePostPublishRequest(postId, !published));
 
-      // Update the local storage with the changed is_published value
+      
       const updatedTablePosts = tablePosts.map((post) =>
         post.id === postId ? { ...post, is_published: !published } : post
       );
 
       localStorage.setItem('tablePosts', JSON.stringify(updatedTablePosts));
 
-      // Remove the post from the 'posts' data in local storage if unpublished
+     
       if (!published) {
         const updatedPosts = posts.filter(post => post.id !== postId);
         localStorage.setItem('posts', JSON.stringify(updatedPosts ));

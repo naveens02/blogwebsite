@@ -66,10 +66,10 @@ function* updateTablePostSaga(action) {
     formData.append('name', action.payload.name);
     formData.append('content', action.payload.content);
     formData.append('image', action.payload.image);
-    formData.append('_method', 'patch'); // This is required for Laravel to treat it as a PATCH request
+    formData.append('_method', 'patch'); 
 
     const response = yield call(fetch, apiUrl, {
-      method: 'POST', // Use POST as per your provided request method
+      method: 'POST', 
       headers: {
         'Authorization': localStorage.getItem('token'),
       },
@@ -117,7 +117,7 @@ function createTablePost(formData) {
     },
   });
 }
-
+// eslint-disable-next-line
 function updateTablePost(apiUrl, requestData) {
   return axios.patch(apiUrl, requestData, {
     headers: {
@@ -181,5 +181,5 @@ export function* watchTablePosts() {
   yield takeLatest('UPDATE_TABLE_POST_REQUEST', updateTablePostSaga);
   yield takeLatest('PUBLISH_POST_REQUEST', publishPostSaga);
   yield takeLatest('UNPUBLISH_POST_REQUEST', unpublishPostSaga);
-  // Add other takeLatest calls for remaining actions if available
+  
 }

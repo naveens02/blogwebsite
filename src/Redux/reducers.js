@@ -8,8 +8,8 @@ export const authSlice = createSlice({
     token: null,
     first_name: '',
     last_name: '',
-    image: null, // Image object or null
-    // Other necessary state data
+    image: null, 
+    
   },
   reducers: {
     loginSuccess: (state, action) => {
@@ -18,32 +18,29 @@ export const authSlice = createSlice({
       state.first_name = action.payload.first_name;
       state.last_name = action.payload.last_name;
       state.image = action.payload.image;
-      // Handle other state changes upon successful login
+      
     },
     fetchUserSuccess: (state, action) => {
       state.first_name = action.payload.first_name;
       state.last_name = action.payload.last_name;
       state.image = action.payload.image;
-      // Update other user data if available from the fetch
+      
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.token = null;
       state.first_name = '';
       state.last_name = '';
-      state.image = null; // Reset image state on logout
-      // Handle other state changes upon logout
+      state.image = null; 
+    
     },
     updateProfileSuccess: (state, action) => {
       state.first_name = action.payload.first_name;
       state.last_name = action.payload.last_name;
-      state.image = action.payload.image; // Assuming a URL or base64 representation of the image
-      // Handle other state changes upon profile update
+      state.image = action.payload.image; 
     },
     updateProfileRequest: (state, action) => {
-      // Logic to handle the initial update request, if necessary
-      // This action might trigger an API call to update the profile
-      // You can handle the state changes related to the update request here
+     
     },
     clearState: (state) => {
       state.isAuthenticated = false;
@@ -51,9 +48,9 @@ export const authSlice = createSlice({
       state.first_name = '';
       state.last_name = '';
       state.image = null;
-      // Clear any other state data if necessary
+     
     },
-    // Other reducers as needed
+   
   },
 });
 

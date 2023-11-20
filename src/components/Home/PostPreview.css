@@ -2,53 +2,53 @@
     max-width: 700px;
     margin: 0 auto;
     padding: 20px;
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
-    border-radius: 10px; /* Add border-radius for rounded corners */
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px; 
 }
 
 .PostPreview a.BackButton {
     display: inline-block;
-    padding: 5px 10px; /* Adjust the padding as needed */
+    padding: 5px 10px; 
     margin-bottom: 20px;
-    background-color: #a2a2a2; /* Cement color */
+    background-color: #a2a2a2;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    font-size: 14px; /* Adjust the font size as needed */
+    font-size: 14px; 
   }
   
 .PostPreview button.DeleteButton {
-    background-color: #ff8c8c; /* Light red background */
+    background-color: #ff8c8c; 
     color: #fff;
     border: none;
     margin-left: 50%;
 }
 
-/* Edit and Publish button styles */
+
 .PostPreview .EditButton {
-    background-color: #1890ff; /* Blue background */
+    background-color: #1890ff; 
     color: #fff;
     border: none;
     margin-left: 5px;
-    align-items: center; /* Align content vertically in the flex container */
-    padding: 5px 10px; /* Add padding for better aesthetics */
-    border-radius: 5px; /* Add border-radius for rounded corners */
+    align-items: center; 
+    padding: 5px 10px; 
+    border-radius: 5px; 
 }
 .PostPreview button.PublishButton {
-    background-color: #1890ff; /* Blue background */
+    background-color: #1890ff; 
     color: #fff;
     border: none;
     margin-left: 5px;
 }
 
-/* Heading styles */
+
 .PostPreview h1 {
     color: #000;
     font-size: 24px;
     margin-bottom: 10px;
 }
 
-/* Image styles */
+
 .PostPreview img {
     max-width: 100%;
     height: auto;
@@ -59,7 +59,7 @@
   
 }
 
-/* Content styles */
+
 .PostPreview p {
     font-size: 16px;
     line-height: 1.5;

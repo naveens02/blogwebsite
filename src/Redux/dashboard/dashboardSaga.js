@@ -7,8 +7,7 @@ function* fetchPostsSaga() {
     const response = yield call(axios.get, 'https://react-assignment-api.mallow-tech.com/api/public/posts');
     yield put({ type: FETCH_POSTS, payload: response.data });
   } catch (error) {
-    // Handle the error
-    // Dispatch an action to update the state with an error message if needed
+   
   }
 }
 
@@ -18,8 +17,7 @@ function* fetchSinglePostSaga(action) {
     const response = yield call(axios.get, `https://react-assignment-api.mallow-tech.com/api/public/posts/${postId}`);
     yield put({ type: FETCH_SINGLE_POST, payload: response.data });
   } catch (error) {
-    // Handle the error
-    // Dispatch an action to update the state with an error message if needed
+    
   }
 }
 
@@ -31,8 +29,7 @@ function* createCommentSaga(action) {
     });
     yield put({ type: CREATE_COMMENT, payload: response.data });
   } catch (error) {
-    // Handle the error
-    // Dispatch an action to update the state with an error message if needed
+    
   }
 }
 
@@ -42,8 +39,7 @@ function* deleteCommentSaga(action) {
     yield call(axios.delete, `https://react-assignment-api.mallow-tech.com/api/posts/comments/${commentId}`);
     yield put({ type: DELETE_COMMENT, payload: commentId });
   } catch (error) {
-    // Handle the error
-    // Dispatch an action to update the state with an error message if needed
+   
   }
 }
 
@@ -55,8 +51,8 @@ function* editCommentSaga(action) {
     });
     yield put({ type: EDIT_COMMENT, payload: response.data });
   } catch (error) {
-    // Handle the error
-    // Dispatch an action to update the state with an error message if needed
+   
+    
   }
 }
 

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchPosts, fetchSinglePost } from './postsActions';
-// Import your async action creators
+
 
 const initialState = {
   posts: [],

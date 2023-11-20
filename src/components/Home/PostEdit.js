@@ -15,7 +15,7 @@ const PostEdit = () => {
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // Set initial form values when post data is available
+  
   useEffect(() => {
     if (post) {
       form.setFieldsValue({
@@ -25,14 +25,14 @@ const PostEdit = () => {
     }
   }, [form, post]);
 
-  // Handle file change for the image upload
+  
   const onFileChange = (info) => {
     if (info.file.status === 'done') {
       setSelectedFile(info.file.originFileObj);
     }
   };
 
-  // Handle update button click
+  
   const handleUpdate = async (values) => {
     try {
       const formData = new FormData();

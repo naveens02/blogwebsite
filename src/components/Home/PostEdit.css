@@ -1,4 +1,4 @@
-/* PostEdit.css */
+
 
 .post-edit-container {
     max-width: 600px;
@@ -22,23 +22,21 @@
     margin-bottom: 16px;
   }
   
-  /* Add spacing between form items */
+  
   .form-item:not(:last-child) {
     margin-bottom: 50px;
   }
   .BackButton {
     display: inline-block;
-    padding: 5px 10px; /* Adjust the padding as needed */
+    padding: 5px 10px; 
     margin-bottom: 20px;
-    background-color: #a2a2a2; /* Cement color */
+    background-color: #a2a2a2; 
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     font-size: 14px; 
   }
 
-  .form-container {
-    /* existing styles for form-container */
-  }
-  /* You can adjust the spacing as needed */
+ 
+ 
   

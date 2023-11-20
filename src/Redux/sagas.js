@@ -103,7 +103,7 @@ function* fetchUserData() {
 export default function* rootSaga() {
   yield takeLatest('LOGIN_REQUEST', watchLogin);
   yield takeLatest('LOGOUT_REQUEST', watchLogout);
-  yield takeLatest('UPDATE_PROFILE_REQUEST', updateProfile); // Make sure it's 'UPDATE_PROFILE_REQUEST'
+  yield takeLatest('UPDATE_PROFILE_REQUEST', updateProfile); 
   yield takeLatest('FETCH_USER_DATA_REQUEST', fetchUserData);
-  // Add other watchers if needed
+ 
 }

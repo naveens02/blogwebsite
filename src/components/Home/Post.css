@@ -1,34 +1,29 @@
-/* Post.css */
 
-/* Main container styles */
 .post-container {
     height: 100vh;
     padding: 20px;
   }
   
-  /* Create Post button styles */
+  
   .create-post-button {
     margin-bottom: 20px;
     float: right;
     margin-left: 5px;
   }
   
-  /* Search input styles */
+  
   .search-input {
     width: 200px;
     float: right;
     margin-bottom: 20px;
   }
   
-  /* Table styles */
+  
   .table-container {
     margin-top: 20px;
   }
   
-  /* Form modal styles */
  
- 
-  /* File input styles */
   .file-input-container {
     margin-top: 10px;
   
@@ -37,54 +32,52 @@
     }
   }
   .button{
-    background-color: rgb(7, 170, 240); /* Light red background */
+    background-color: rgb(7, 170, 240); 
     color: #fff;
     border: none;
     margin-right: 5px;
 }
   .DeleteButton {
-    background-color: #ff8c8c; /* Light red background */
+    background-color: #ff8c8c; 
     color: #fff;
     border: none;
     margin-right: 5px;
 }
-/* Post.css */
 
-/* Form modal styles */
 .post-form-modal {
     display: block;
-    flex-direction: column; /* Adjusted to column layout */
+    flex-direction: column; 
     justify-content: center;
-    align-items: center; /* Center content horizontally */
-    padding: 20px; /* Increased padding for spacing inside the modal */
+    align-items: center; 
+    padding: 20px; 
     margin-bottom: 50px;
-    min-width: 400px; /* Set a minimum width */
+    min-width: 400px; 
   }
   .post-form-modal .title{
     color: black;
   }
   .post-form-modal .ant-modal-content {
     border-radius: 10px; 
-    margin-bottom: 10px;/* Added border-radius for rounded corners */
+    margin-bottom: 10px;
   }
   
   .post-form-modal .ant-modal-body {
-    flex-grow: 3; /* Allow the body to grow and take available space */
+    flex-grow: 3; 
   }
   
   .post-form-modal .ant-form-item {
-    margin-bottom: 10px; /* Adjusted spacing between form items */
+    margin-bottom: 10px; 
   }
   
   .post-form-modal .ant-form-item-label {
-    text-align: left; /* Align form item labels to the left */
+    text-align: left; 
   }
   
   .post-form-modal .ant-form-item-control {
-    line-height: 3; /* Adjusted line-height for better readability */
+    line-height: 3; 
   }
   
   .post-form-modal .ant-btn {
-    width: 100%; /* Make buttons full width */
+    width: 100%; 
   }
   
